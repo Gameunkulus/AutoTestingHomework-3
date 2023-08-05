@@ -1,26 +1,32 @@
 package ru.netology;
 
-import com.codeborne.selenide.SelenideElement;
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 
-import static com.codeborne.selenide.Condition.exactText;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.open;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 class CallbackTest {
     private WebDriver driver;
 
     @BeforeAll
     static void setUpAll() {
-        System.setProperty("webdriver.chrome.driver", "driver/chromedriver.exe");
+        WebDriverManager.chromedriver().setup();
     }
 
     @BeforeEach
     void setUp() {
-        driver = new ChromeDriver();
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--disable-dev-shm-usage");
+        options.addArguments("--no-sandbox");
+        options.addArguments("--headless");
+        driver = new ChromeDriver(options);
+        driver.get("http://localhost:9999");
     }
 
     @AfterEach
@@ -30,14 +36,13 @@ class CallbackTest {
     }
 
     @Test
-    void shouldTest() {
-        driver.get("http://localhost:0.0.0.0:9999");
-        SelenideElement form = $("[data-test-id=callback-form]");
+    void shouldTestV2() {
+        WebElement form = driver.findElement(By.cssSelector("[data-test-id=callback-form]"));
         form.findElement(By.cssSelector("[data-test-id=name] input")).sendKeys("Tatyana Robinkevich");
         form.findElement(By.cssSelector("[data-test-id=phone] input")).sendKeys("+7915552473");
         form.findElement(By.cssSelector("[data-test-id=agreement]")).click();
         driver.findElement(By.className("button")).click();
         String text = driver.findElement(By.className("[data-test-id=order-success]")).getText();
-        Assertions.assertEquals("Ваша заявка успешно отправлена! Наш менеджер свяжется с вами в ближайшее время.", text.trim());
+        assertEquals("Ваша заявка успешно отправлена! Наш менеджер свяжется с вами в ближайшее время.", text.trim());
     }
 }
