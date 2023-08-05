@@ -36,13 +36,12 @@ class CallbackTest {
     }
 
     @Test
-    void shouldTestV2() {
-        WebElement form = driver.findElement(By.cssSelector("[data-test-id=callback-form]"));
-        form.findElement(By.cssSelector("[data-test-id=name] input")).sendKeys("Tatyana Robinkevich");
-        form.findElement(By.cssSelector("[data-test-id=phone] input")).sendKeys("+7915552473");
-        form.findElement(By.cssSelector("[data-test-id=agreement]")).click();
-        form.findElement(By.cssSelector("button.button")).click();
-        String text = driver.findElement(By.className("[data-test-id=order-success]")).getText();
-        assertEquals("Ваша заявка успешно отправлена! Наш менеджер свяжется с вами в ближайшее время.", text.trim());
+    void shouldTestV1() {
+        driver.findElement(By.cssSelector("[data-test-id=name] input")).sendKeys("Татьяна Робинкевич");
+        driver.findElement(By.cssSelector("[data-test-id=phone] input")).sendKeys("+79155552473");
+        driver.findElement(By.cssSelector("[data-test-id=agreement]")).click();
+        driver.findElement(By.cssSelector("button.button")).click();
+        String text = driver.findElement(By.cssSelector("[data-test-id=order-success]")).getText().trim();
+        assertEquals("Ваша заявка успешно отправлена! Наш менеджер свяжется с вами в ближайшее время.", text));
     }
 }
